@@ -1,0 +1,102 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: μVision V5.28.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: veis 1256639585@qq.com,  , LIC=V859U-SLM5V-GPIZR-K8U4X-N90MY-L0GV0
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.28.0.0
+Toolchain Path:  h:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.28.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
+Dialog DLL:      TCM.DLL V1.36.2.0
+ 
+<h2>Project:</h2>
+F:\宽带放大器\20190629国赛PCB准备\Drivers\STM32\Project_Demo - 20190811\USER\Demo.uvprojx
+Project File Date:  08/07/2019
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'h:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'Demo'
+compiling main.c...
+main.c(21): warning:  #177-D: variable "str"  was declared but never referenced
+      uint8_t str[50];
+main.c(24): warning:  #177-D: variable "loop"  was declared but never referenced
+      uint8_t loop = 1;
+main.c: 2 warnings, 0 errors
+compiling app.c...
+..\APP\app.c(53): warning:  #177-D: variable "i"  was declared but never referenced
+      uint16_t i;
+..\APP\app.c(405): warning:  #177-D: variable "vin_vpp"  was declared but never referenced
+      float vin_vpp = 0;
+..\APP\app.c(437): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      float gain = output_voltage/0.02;
+..\APP\app.c(582): warning:  #940-D: missing return statement at end of non-void function "amp_freq_curve_new" 
+  }
+..\APP\app.c(669): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          if(resin>25000.0 && resin<35250.0)
+..\APP\app.c(669): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          if(resin>25000.0 && resin<35250.0)
+..\APP\app.c(676): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          else if(resin>20000.0 && resin<25000.0)
+..\APP\app.c(676): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          else if(resin>20000.0 && resin<25000.0)
+..\APP\app.c(690): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          else if(resin>7500.0 && resin<9000.0)
+..\APP\app.c(690): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+          else if(resin>7500.0 && resin<9000.0)
+..\APP\app.c(588): warning:  #177-D: variable "adc_val"  was declared but never referenced
+      uint16_t adc_val = 0;
+..\APP\app.c(589): warning:  #177-D: variable "i"  was declared but never referenced
+      uint16_t i;
+..\APP\app.c(591): warning:  #177-D: variable "flag"  was declared but never referenced
+      uint8_t flag = 0;
+..\APP\app.c(727): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      if(Iref<0.1)
+..\APP\app.c(774): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      if(val>1.0)
+..\APP\app.c(707): warning:  #177-D: variable "tem"  was declared but never referenced
+      float tem = 0;
+..\APP\app.c(709): warning:  #177-D: variable "out_res"  was declared but never referenced
+      float out_res;
+..\APP\app.c(712): warning:  #177-D: variable "db"  was declared but never referenced
+      uint16_t db = 0;
+..\APP\app.c(804): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      if(result_sample[0] > 1.0)
+..\APP\app.c(795): warning:  #177-D: variable "tem"  was declared but never referenced
+      float tem;
+..\APP\app.c(818): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      if(result_sample1[0] > 1.7)
+..\APP\app.c(831): warning:  #1035-D: single-precision operand implicitly converted to double-precision
+      if(result_sample1[0] > 1.2)
+..\APP\app.c: 22 warnings, 0 errors
+linking...
+Program Size: Code=22452 RO-data=6644 RW-data=200 ZI-data=3312  
+FromELF: creating hex file...
+"..\OBJ\STM32_FFT.axf" - 0 Error(s), 24 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32F4xx_DFP.2.13.0.pack
+                Keil.STM32F4xx_DFP.2.13.0
+                STMicroelectronics STM32F4 Series Device Support, Drivers and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_Demo
+  h:\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.13.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:06
+</pre>
+</body>
+</html>

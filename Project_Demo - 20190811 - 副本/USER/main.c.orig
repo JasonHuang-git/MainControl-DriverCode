@@ -1,0 +1,123 @@
+#include <bsp.h>
+extern struct component cases_member; 
+extern struct component r1_status;
+extern struct component r2_status;
+extern struct component r3_status;
+extern struct component r4_status;
+extern struct component c1_status;
+extern struct component c2_status;
+extern struct component c3_status;
+
+/**
+ * @name	  main
+ * @brief     执行裸机程序
+ * @param	  空
+ * @return    int
+ * @DateTime  2019-7-17
+ */
+int main(void)
+{
+    uint8_t str[50];
+    uint8_t res = 0;
+    uint8_t flag = 0;
+	// 系统初始化
+	bsp_init();
+   
+    pe4302_a_set(0x25);
+    AD9833_Set_Fre_app(1000);
+    LCD_Clear(WHITE);
+    LCD_ShowString(200,150,200,24,24,"Waiting...");
+    amp_freq_curve();
+    LCD_Clear(WHITE);
+    LCD_ShowString(20,150,300,24,24,"S2:Bias Mode  S3:Advantance Mode");
+    LCD_ShowString(20,180,300,24,24,"Please Select");
+	while(1)
+	{ 
+        LED1 = !LED1;
+        switch(key_scan(0))
+        {
+            case S2_Val:
+                LCD_Clear(WHITE);
+                res = res_judge();
+                if(res)
+                {
+                    LCD_Clear(WHITE);
+                    display_menu_B();
+                    cut_cap();
+                    if((r1_status.status != nc) && (r1_status.status != shortcut))
+                        LCD_ShowString(20+90,30,120,16,16,(uint8_t *)"OK");
+                    else if(r1_status.status == nc)
+                        LCD_ShowString(20+90,30,120,16,16,(uint8_t *)"No Connect");
+                    else if(r1_status.status == shortcut)
+                        LCD_ShowString(20+90,30,120,16,16,(uint8_t *)"Shortcut");
+                    
+                    if(r2_status.status != nc && r2_status.status != shortcut)
+                        LCD_ShowString(20+90,60,120,16,16,(uint8_t *)"OK");
+                    else if(r2_status.status == nc)
+                        LCD_ShowString(20+90,60,120,16,16,(uint8_t *)"No Connect");
+                    else if(r2_status.status == shortcut)
+                        LCD_ShowString(20+90,60,120,16,16,(uint8_t *)"Shortcut");
+                    
+                    if(r3_status.status != nc && r3_status.status != shortcut)
+                        LCD_ShowString(20+90,90,120,16,16,(uint8_t *)"OK");
+                    else if(r3_status.status == nc)
+                        LCD_ShowString(20+90,90,120,16,16,(uint8_t *)"No Connect");
+                    else if(r3_status.status == shortcut)
+                        LCD_ShowString(20+90,90,120,16,16,(uint8_t *)"Shortcut");
+                    
+                    if(r4_status.status != nc && r4_status.status != shortcut)
+                        LCD_ShowString(20+90,120,120,16,16,(uint8_t *)"OK");
+                    else if(r4_status.status == nc)
+                        LCD_ShowString(20+90,120,120,16,16,(uint8_t *)"No Connect");
+                    else if(r4_status.status == shortcut)
+                        LCD_ShowString(20+90,120,120,16,16,(uint8_t *)"Shortcut");
+                    
+                    if(c1_status.status != nc && c1_status.status != shortcut)
+                        LCD_ShowString(20+90,150,120,16,16,(uint8_t *)"OK");
+                    else if(c1_status.status == nc)
+                        LCD_ShowString(20+90,150,120,16,16,(uint8_t *)"No Connect");
+                    else if(c1_status.status == shortcut)
+                        LCD_ShowString(20+90,150,120,16,16,(uint8_t *)"Shortcut");
+                    
+                    if(c2_status.status != nc && c2_status.status != shortcut)
+                        LCD_ShowString(20+90,180,120,16,16,(uint8_t *)"OK");
+                    else if(c2_status.status == nc)
+                        LCD_ShowString(20+90,180,120,16,16,(uint8_t *)"No Connect");
+                    else if(c2_status.status == shortcut)
+                        LCD_ShowString(20+90,180,120,16,16,(uint8_t *)"Shortcut");
+                    
+                    if(c3_status.status != nc && c3_status.status != shortcut)
+                        LCD_ShowString(20+90,210,120,16,16,(uint8_t *)"OK");
+                    else if(c3_status.status == nc)
+                        LCD_ShowString(20+90,210,120,16,16,(uint8_t *)"No Connect");
+                    else if(c3_status.status == shortcut)
+                        LCD_ShowString(20+90,210,120,16,16,(uint8_t *)"Shortcut");
+                            if(c3_fres())
+                    {
+                        printf("并入C3\r\n");
+                    }
+                    if(c2_fres())
+                    {
+                        printf("并入C2\r\n");
+                    }
+
+                }
+                else
+                {
+              //      LCD_Clear(WHITE);
+                    LCD_ShowString(0,0,300,24,24,"Resitor Measure Error!");
+                }
+                break;
+            case S3_Val:
+            {
+                LCD_Clear(WHITE);
+                display_menu();
+                update_display();
+                break;
+            }
+            
+        }
+
+	}
+}
+ 
