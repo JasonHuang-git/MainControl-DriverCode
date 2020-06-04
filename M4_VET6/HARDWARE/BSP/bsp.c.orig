@@ -1,0 +1,93 @@
+#include <bsp.h>
+
+// 通过串口打印SD卡相关信息测试程序
+void show_sdcard_info(void)
+{
+    switch(SDCardInfo.CardType)
+    {
+    case SDIO_STD_CAPACITY_SD_CARD_V1_1:
+        printf("Card Type:SDSC V1.1\r\n");
+        break;
+    case SDIO_STD_CAPACITY_SD_CARD_V2_0:
+        printf("Card Type:SDSC V2.0\r\n");
+        break;
+    case SDIO_HIGH_CAPACITY_SD_CARD:
+        printf("Card Type:SDHC V2.0\r\n");
+        break;
+    case SDIO_MULTIMEDIA_CARD:
+        printf("Card Type:MMC Card\r\n");
+        break;
+    }
+    printf("Card ManufacturerID:%d\r\n", SDCardInfo.SD_cid.ManufacturerID);	// 制造商ID
+    printf("Card RCA:%d\r\n", SDCardInfo.RCA);								// 卡相对地址
+    printf("Card Capacity:%d MB\r\n", (u32)(SDCardInfo.CardCapacity >> 20));// 显示容量
+    printf("Card BlockSize:%d\r\n\r\n", SDCardInfo.CardBlockSize);			// 显示块大小
+
+    POINT_COLOR = BLUE;	                                                    // 设置字体为蓝色
+    // 检测SD卡成功
+    LCD_ShowString(30, 0, 200, 16, 16, (uint8_t *)"SD Card OK    ");
+    LCD_ShowString(30, 20, 200, 16, 16, (uint8_t *)"SD Card Size:      MB");
+    LCD_ShowNum(13 * 8 + 30, 20, SDCardInfo.CardCapacity >> 20, 5, 16);      // 显示SD卡容量
+}
+
+void checkfont(void)
+{
+    while(font_init()) 		//检查字库
+	{	    
+		LCD_ShowString(30,50,200,16,16,"Font Error!");
+		delay_ms(200);				  
+		LCD_Fill(30,50,240,66,WHITE);//清除显示	     
+		delay_ms(200);				  
+	}  	
+}
+
+// 初始化函数
+void bsp_init(void)
+{
+    uint32_t total, free;
+
+    NVIC_SetPriorityGrouping(2);    // 设置中断优先级分组为2
+    delay_init(168);                // 初始系统主时钟为168MHz
+    uart_init(115200);              // 设置调试串口波特率为115200
+
+    LCD_Init();                     // 初始化LCD
+    tp_dev.init();                  // 初始化触摸功能
+    led_gpio_init();                // 初始化LED外设
+    key_gpio_init();                // 初始化独立按键
+    SPI1_Init();		   			// 初始化SPI
+//    nRF24L01_InitHard();            // 初始化NRF24L01模块
+//    while(!nRF24L01_ConnectCheck())
+//    {
+//        printf("模块连接失败！\r\n");
+//    }
+    W25QXX_Init();				    // 初始化W25Q128
+    my_mem_init(SRAMIN);            // 初始化内部内存池
+    my_mem_init(SRAMCCM);           // 初始化CCM内存池
+
+    while(SD_Init())                // 初始化SD卡
+    {
+        POINT_COLOR = RED;
+        LCD_ShowString(30, 0, 200, 16, 16, (uint8_t *)"SD Card Error!");
+        delay_ms(500);
+        LCD_ShowString(30, 0, 200, 16, 16, (uint8_t *)"Please Check !");
+        delay_ms(500);
+        LED1 = !LED1;
+    }
+    show_sdcard_info();
+    exfuns_init();							    // 为fatfs相关变量申请内存
+    f_mount(fs[0], "0:", 1); 					// 挂载SD卡
+    while(exf_getfree("0", &total, &free))	    // 得到SD卡的总容量和剩余容量
+    {
+        LCD_ShowString(30, 40, 200, 16, 16, "SD Card Fatfs Error!");
+        delay_ms(200);
+        LCD_Fill(30, 40, 240, 150 + 16, WHITE);	//清除显示
+        delay_ms(200);
+        LED1 = !LED1;   // DS0闪烁
+    }
+    POINT_COLOR = BLUE; // 设置字体为蓝色
+    LCD_ShowString(30, 40, 200, 16, 16, "FATFS OK!");
+    LCD_ShowString(30, 60, 200, 16, 16, "SD Total Size:      MB");
+    LCD_ShowString(30, 80, 200, 16, 16, "SD  Free Size:      MB");
+    LCD_ShowNum(30 + 8 * 14, 60, total >> 10, 5, 16);				// 显示SD卡总容量 MB
+    LCD_ShowNum(30 + 8 * 14, 80, free >> 10, 5, 16);				// 显示SD卡剩余容量 MB
+}

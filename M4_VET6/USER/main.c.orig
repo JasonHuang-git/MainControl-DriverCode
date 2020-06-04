@@ -1,0 +1,85 @@
+#include <bsp.h>
+
+uint8_t tx_buf[TX_PLOAD_WIDTH];
+uint8_t rx_buf[TX_PLOAD_WIDTH];
+uint8_t s_ucTxRxMode = 0;       // 0：发送；1：接收
+uint8_t s_ucRxStatus;
+
+int main(void)
+{
+    uint8_t i;
+    uint8_t key_code = 0;
+    uint8_t count = 0;
+    uint8_t buf[512];
+    u32 sd_size;
+    uint16_t ID;
+    
+    bsp_init();
+    
+//    ID = W25QXX_ReadID();
+//    printf("ID = 0x%x\r\n", ID);
+    
+    while(!nRF24L01_ConnectCheck())
+    {
+        printf("模块连接失败！\r\n");
+    }
+   
+    while(1)
+    {
+        key_code=key_scan(0);
+		if(key_code==KEY0_PRES)                 // KEY0按下了
+		{
+			if(SD_ReadDisk(buf, 0, 1) == 0)	    // 读取0扇区的内容
+			{	
+				LCD_ShowString(30,190,200,16,16,(uint8_t *)"USART1 Sending Data...");
+				printf("SECTOR 0 DATA:\r\n");
+				for(sd_size=0; sd_size<512; sd_size++)
+                    printf("%x ",buf[sd_size]); // 打印0扇区数据   
+				printf("\r\nDATA ENDED\r\n");
+				LCD_ShowString(30, 190, 200, 16, 16, (uint8_t *)"USART1 Send Data Over!");
+			} 
+		}          
+//        tp_dev.scan(0);
+//        if(tp_dev.sta&TP_PRES_DOWN)
+//		{
+//			printf("x:%d  y:%d\r\n",tp_dev.x[0],tp_dev.y[0]);
+//            LED1 = ~LED1;
+//		}
+//        key_code = key_scan(0);
+//        if(key_code == KEY0_PRES)
+//        {
+//            printf("NRF模块进入发送模式\r\n");
+//            nRF24L01_TxMode();
+//            s_ucTxRxMode = 1;
+//        }
+//        else if(key_code == WKUP_PRES)
+//        {
+//            printf("NRF模块进入接收模式\r\n");
+//            nRF24L01_RxMode();
+//            s_ucTxRxMode = 2;
+//        }
+//        if(s_ucTxRxMode == 2)
+//        {
+//             s_ucRxStatus = nRF24L01_RxData(rx_buf);
+//            /* 成功接收数据，将数据从串口打印输出 */
+//			if(s_ucRxStatus == RX_DR)
+//			{	
+//                for(i = 0; i < TX_PLOAD_WIDTH; i++)
+//                {
+//                    printf("%d", rx_buf[i]);
+//                }
+//                printf("\r\n接收完成！\r\n");
+//			} 	
+//        }
+//        else if(s_ucTxRxMode == 1)
+//        {
+//            for(i = 0; i < TX_PLOAD_WIDTH; i++)
+//            {
+//                tx_buf[i] = count++;
+//            }
+//            s_ucRxStatus = nRF24L01_TxData(tx_buf);
+//            printf("发送完成！\r\n");
+//        }
+        
+    }
+}
